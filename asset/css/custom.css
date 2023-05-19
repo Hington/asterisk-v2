@@ -1,0 +1,141 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.container{
+    background: url(/asset/img/bg.jpeg) 50% no-repeat;
+    background-size: cover;
+    height: 20vh;
+    position: relative;
+    display: flex;
+    width: 100vw;
+}
+.container h1{
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-shadow: -1px 1px 20px black;
+}
+
+section .container_1{
+    height: 300px;
+    width: 300px;
+    background: #263D29;
+    border-radius: 50%;
+    position: relative;
+    margin: 2px auto;
+    display: flex;
+    align-items: center;
+}
+section{
+    position: relative;
+    top: 125px; 
+}
+section .cercle{
+    height: 130px;
+    width: 130px;
+    background: #fff;
+    border-radius: 50%;
+    position: relative;
+    margin: 2px auto;
+    display: flex;
+    justify-content: center;
+}
+
+section .cercle .cercle_B{
+    height: 97px;
+    width: 20px;
+    background: #fff;
+    position: relative;
+    top: 109px;
+}
+section .cercle .B0{
+    right: 80px;
+    top: -31px;
+    transform: rotate(111deg);
+}
+section .cercle .B1{
+    top: 118px;
+}
+section .cercle .B2{
+    left: 80px;
+    top: -31px;
+    transform: rotate(70deg);
+}
+
+.container_1 img{
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    left: 33%;
+}
+.container_1 p{
+    position: absolute;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 13px;
+}
+.container_1 p.texte1{
+    width: 70%;
+    top: 44px;
+    left: 47px;
+}
+.container_1 p.texte2{
+    width: 60%;
+    top: 187px;
+    left: 146px;
+    transform: rotate(307deg);
+}
+.container_1 p.texte3{
+    width: 70%;
+    top: 236px;
+    left: -22px;
+    transform: rotate(59deg);
+}
+
+/* .container_1 p.text1:hover,
+.container_1 p.text2:hover,
+.container_1 p.text3:hover{
+    background-color: #F27808;
+} */
+
+
+.sur_cote .Texte{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: #fff;
+    position: absolute;
+    transform: translate(-50%,-50%);
+}
+.sur_cote #texte1{
+    left: 50%;
+    top: 0px;
+    display: none;
+}
+.sur_cote #texte2{
+    left: 462px;
+    top: 239px;
+    display: none;
+}
+.sur_cote #texte3{
+    left: 221px;
+    top: 226px;
+    display: none;
+}
+.ArrierPlan{
+    background: #F27808 !important;
+    cursor: pointer;
+}
+.Sur_Cote{
+    display: block !important;
+}
+.dispa_texte{
+    display: none !important;
+}
