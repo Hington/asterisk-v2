@@ -6,9 +6,9 @@
 
 
 .container{
-    background: url(/asset/img/bg.jpeg) 50% no-repeat;
+    background: url(../img/bg.jpeg) 50% no-repeat;
     background-size: cover;
-    height: 20vh;
+    height: 40vh;
     position: relative;
     display: flex;
     width: 100vw;
@@ -35,7 +35,8 @@ section .container_1{
 }
 section{
     position: relative;
-    top: 125px; 
+    padding: 27px;
+    height: 50vh; 
 }
 section .cercle{
     height: 130px;
@@ -110,32 +111,52 @@ section .cercle .B2{
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    background-color: #fff;
-    position: absolute;
+    background: #fff;
     transform: translate(-50%,-50%);
 }
 .sur_cote #texte1{
     left: 50%;
-    top: 0px;
+    top: -297px;
+    position: absolute;
     display: none;
 }
 .sur_cote #texte2{
-    left: 462px;
-    top: 239px;
+    left: 87%;
+    position: absolute;
+    top: -56px;
     display: none;
 }
 .sur_cote #texte3{
-    left: 221px;
-    top: 226px;
+    left: 8%;
+    position: absolute;
+    top: -78px;
     display: none;
+}
+.sur_cote{
+    width: 300px;
+    background: #83918566;
+    border-radius: 50%;
+    position: relative;
+    margin: 2px auto;
 }
 .ArrierPlan{
     background: #F27808 !important;
     cursor: pointer;
 }
 .Sur_Cote{
-    display: block !important;
+    display: inline !important;
 }
 .dispa_texte{
     display: none !important;
+}
+
+#footer{
+    padding: 24px;
+    position: relative;
+    bottom: -3px;
+    background: #779b81;
+    text-align: center;
+}
+#footer p{
+    color: #fff;
 }

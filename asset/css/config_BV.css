@@ -1,0 +1,92 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+body{
+    overflow: hidden;
+}
+.config_general{
+    position: absolute;
+    margin: 5px auto;
+    background: gray;
+    left: 50%;
+    top: 50%;
+    width: 70%;
+    scroll-behavior: auto;
+    height: 500px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    opacity: 0;
+    transition-timing-function: ease-out;
+    transition: 0.8s;
+    transform: translate(80%);  
+}
+.config_solu{
+    position: absolute;
+    margin: 5px auto;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    transition-timing-function: ease-out;
+    transition: 0.8s;
+    transform: translate(80%);  
+}
+
+
+.close_img{
+    display: none;
+}
+img.close{
+    height: 28px;
+    position: fixed;
+    top: 13%;
+    left: 3%;
+    cursor: pointer;
+}
+#config_BV h2, #config_QUEUE h2{
+    text-transform: uppercase;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+}
+#config_BV p ,#config_QUEUE p{
+    padding: 5px;
+}
+#config_BV .terminal, #config_QUEUE .terminal{
+    background: #000;
+    color: lime;
+}
+#config_BV .terminal pre , #config_QUEUE .terminal pre{
+    overflow-x:scroll;
+    padding: 15px;
+}
+#config_BV .terminal p, #config_QUEUE .terminal p{
+    text-align: center;
+    background: #4a4343;
+    margin: 0;
+    padding: 0;
+    color: #ddd3d3;
+    box-shadow: 2px 0px 2px 0px #fff;
+}
+#config_BV .terminal span, #config_QUEUE .terminal span{
+    color: #4254cb;
+}
+#config_BV ul, #config_QUEUE ul{
+    padding: 5px;
+}
+#config_BV ul span{
+    font-weight: bolder;
+    color: #fff;
+}
+.visible{
+    transform: translate(-50%,-50%)!important;
+    z-index: 1!important;
+    opacity: 1!important;
+    transition-timing-function: ease-in!important;
+    transition: 1s!important;
+ 
+}
+.visible_close{
+    display: block !important;
+}

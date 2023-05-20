@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./asset/css/custom.css">
+    <link rel="stylesheet" href="./asset/css/config_BV.css">
     <!-- <link rel="stylesheet" href="./asset/css/responsive.css"> -->
     <!-- <link rel="shortcut icon" href="./asset/img/icon-removebg-preview.png" type="image/x-icon"> -->
     <script src="./asset/js/script.js" defer></script>
@@ -34,5 +35,206 @@
             <div id="texte3" class="Texte Texte3"></div>
         </div>
     </section>
+    <div class="close_img"><img src="./asset/img/close.png" alt="" class="close"></div>
+    
+    <section class="config_general" id="config_BV">
+        <h2>Configuration asterisk et boite vocal</h2>
+        <p>Configuration du fichier sip.conf</p>
+        <div class="terminal">
+            <p>/etc/asterisk/sip.conf</p>
+            <pre>
+                [default_template](!)             		   ; Nom du template . Le « ! » indique qu’il s’agit d’un Template
+                type=friend                        ; Type d'objet SIP (friend = utilisateur)
+                host=dynamic                       ; L’utilisateur n’est pas associé à une IP fixe
+                dtmfmode=rfc2833                   ; Mode DTMF
+                disallow=all                       ; Interdit tous les codecs
+                allow=ulaw                         ; Autorise le codec ulaw
+                nat=never                          ; L'utilisateur ne se trouve pas derrière un NAT
+                hassip=yes                         ; L’utilisateur possède un compte SIP
+                hasiax=yes                         ; L’utilisateur possède un compte iax
+                callwaiting = yes                  ; L’utilisateur peut mettre des appels en attente
+                transfer=yes                       ; L’utilisateur peut transférer des appels
+                canpark=yes                        ; L’utilisateur peut mettre des appels dans le parking
+                hasvoicemail=yes                   ; L’utilisateur possède une boîte vocale 
+                deny=0.0.0.0/0.0.0.0               ; Range d’IP non-autorisées pour le client
+                permit=192.168.1.0/255.255.255.0   ; Range d’IP autorisées pour le client
+                qualify=yes                        ; Permet le monitoring
+                nat=yes
+                
+     <span>#Nous pouvons ensuite créer des utilisateurs :</span> 
+
+                [100](default_template)             ; Numéro SIP et Template utilisé
+                fullname = Laetitia yawa	    ; Nom complet de l'utilisateur (ce qui s'affichera sur le téléphone)
+                username = Ouattara	            ; Nom d'utilisateur
+		mailbox = 100                 	    ; N° de boîte vocale
+                secret = 123456                     ; Mot de passe
+                context = client-banque	            ; Contexte (exploité par le fichier extensions.conf)
+
+                [101](default_template)							
+                fullname = Boni Hington		
+                username = Boni
+		mailbox = 101                  			
+                secret=123456			
+                context = client-banque			
+
+                [9090](default_template)						
+                fullname = accueil		
+                username = hall-1
+		mailbox = 9090			
+                secret=123456			
+                context = work
+
+                [9091](default_template)						
+                fullname = accueil		
+                username = hall-2
+		mailbox = 9091			
+                secret=123456			
+                context = work
+
+                [9092](default_template)						
+                fullname = accueil		
+                username = hall-3
+		mailbox = 9092			
+                secret=123456			
+                context = work
+
+                [9093](default_template)						
+                fullname = accueil		
+                username = hall-4
+		mailbox = 9093			
+                secret=123456			
+                context = work
+
+            </pre>
+        </div>
+
+        <p>Au début de la configuration du voicemail, il faut vider le fichier voicemail.conf</p>
+        <div class="terminal">
+            <pre>$ sudo mv /etc/asterisk/voicemail.conf /etc/asterisk/voicemail.conf.org</pre>
+        </div>
+        <p>Et ajoutez dans /etc/asterisk/voicemail.conf:</p>
+      
+        <div class="terminal">
+            <p>/etc/asterisk/voicemail.conf</p>
+            <pre>
+    [mail-vm]
+        100 => 1234,laetitia
+        101 =>,boni
+        9090 => 1234,accueil-1
+        9091 =>,accueil-2
+        9092 =>,accueil-3
+        9093 =>,accueil-4
+            </pre>
+        </div>
+        <p>
+            [mail-vm] : Contexte dans lequel se trouvent nos utilisateurs
+        </p>
+        <ul>
+            <li><span>100 , 9093, 9090 ... :</span>  Numéro des utilisateur</li>
+            <li><span> 1234 :</span>  Mot de passe pour accéder à la boite vocale, de 9090 à 9093 ils n'ont pas de mot de passe </li>
+            <li> <span> boin, accueil-1 :</span> Nom des utilisateur</li>
+        </ul>
+        <p>il faut maintenant allé dans le fichier /etc/asterisk/extensions.conf</p>
+        <p>Pour chaque utilisateur il faut ajouter la ligne avec son numéro de boite vocale.</p>
+        <div class="terminal">
+            <p>/etc/asterisk/extensions.conf</p>
+            <pre>
+        [client-banque]                             		    ; Nom du contexte
+            include => work   
+        
+        <span>#les client de la banque</span> 
+
+            exten => 100,1,Answer()            	                ; permet de décrocher l’appel
+                same =>n,Dial(SIP/100,5)    	                ; permet de composer un numéro, avec un timeout en cas de non-réponse
+                same =>n,Voicemail(100@client-banque) 	        ; permet de joindre la messagerie de l’utilisateur spécifié
+                same =>n,HangUp()            	                ; permet de raccrocher l’appel
+
+            exten => 101,1,Answer()             
+                same =>n,Dial(SIP/101,5)     
+                same =>n,Voicemail(101@client-banque)  
+                same =>n,HangUp()     
+
+        <span>#les agent de la banque</span> 
+        [work]
+            include => client-banque
+            exten => _909X,1,Answer()            
+                same =>n,Dial(SIP/${EXTEN},5)
+                same =>n,Voicemail(${EXTEN}@mail-vm)     
+                same =>n,HangUp()
+        <span>#On ajoute la ligne qui sert à mettre en place un numéro pour que nos utilisateurs puissent consulter leurs boîtes vocales.</span> 
+            exten => 199,1,Answer()
+            exten => 199,2,VoiceMailMain(${CALLERID(num)}@client-banque)
+            </pre>
+        </div>
+    </section>
+    <section  class="config_general" id="config_QUEUE">
+        <h2>Configuration file d'attente & enregistrement d'appel</h2>
+        <p>Pour la configuration de la fille d'attente nous allons configurer le fichier queues.conf dans un premier temps</p>
+        <div class="terminal">
+            <p>/etc/asterisk/queues.conf</p>
+            <pre>
+[sav]
+        musiconhold=default 	;fait référence aux sections du fichier musiconhold.conf.
+        strategy=rrmemory	;permet de définir la stratégie de réparation des appels, rrmemory : donne les appels aux agents à tour de rôle, en gardant en mémoire le dernier qui a eu un appel.
+        timeout = 20		;définit le temps maximum de sonnerie du poste d’un agent, avant de passer l’appel à l’agent suivant.
+        retry = 15		;définit le temps qu’Asterisk attend avant de retenter de placer un appel chez l’un des agents.
+        maxlen = 0		;définit le nombre maximum d’appels dans la Queue. 0 permet de ne pas mettre de limite.
+        wrapuptime=15		;définit le temps minimum avant qu’Asterisk puisse redonner un appel à un Agent qui vient de raccrocher.
+        joinempty = no		;permet d’autoriser ou non le placement d’appel dans une file d’attente dans laquelle il n’y a aucun agent.
+        leavewhenempty = yes	;permet de sortir les appels d’une file d’attente dans l’laquelle il n’y a aucun agent.
+   
+            </pre>
+        </div>
+        <p>Pour terminer la configuration de la file d'attente nous allons configurer le fichier extensions.conf</p>
+        <div class="terminal">
+            <p>/etc/asterisk/extensions.conf</p>
+            <pre>
+        [client-banque]                             		                      ; Nom du contexte
+            exten => 1010,1,Goto(queues,support,1)                                  ;1010 est le numero de la file d'attent du context queues qui vas diriger tout les appels verds la salle de la file d"attente
+    
+        [agent]
+            exten => 961,1,Addqueuemember(sav,SIP/${CALLERID(num)})		            ; Quand un utilisateur compose le 961, il devient agent de la Queue « sav ».
+                same => n,agi(googletts.agi,"agent-loginok sav",fr)
+                same =>n,Hangup
+            exten => 962,1,agi(googletts.agi,"agent-loggedoff sav. ",fr) 	; Quand il compose le 962, il perd son statut d’agent de la Queue « sav ».
+                same =>n,Removequeuemember(sav,SIP/${CALLERID(num)})
+                same =>n,Hangup
+                
+        [queues]
+            exten => support,1,agi(googletts.agi,"salutation ",fr)  
+                same =>n,Queue(sav)                                         ; la salle de la file d'attente
+                same =>n,congestion()
+                same =>n,hangup()
+                </pre>
+            </div>
+            <p>Pour l'enregistrement d'apple nous allons ajouter ces 4 lignes :</p>
+            <ul>
+                <li>Set(DIRNAME=${CALLERID(num)}/${STRFTIME(${EPOCH},,%Y%m/%d)}) </li>
+                <li> same =>n,Set(FILENAME=${DIRNAME}/${STRFTIME(${EPOCH},,%H%M%S)}-${EXTEN})</li>
+                <li>same =>n,System(/bin/mkdir -p /var/spool/asterisk/monitor/${DIRNAME})</li>
+                <li>same =>n,MixMonitor(${FILENAME}.ulaw)</li>
+            </ul>
+            <div class="terminal">
+                <p>/etc/asterisk/extensions.conf</p>
+                <pre>
+        [queues]
+        exten => support,1,agi(googletts.agi,"salutation ",fr)
+                same =>n,Set(DIRNAME=${CALLERID(num)}/${STRFTIME(${EPOCH},,%Y%m/%d)}) ;
+                same =>n,Set(FILENAME=${DIRNAME}/${STRFTIME(${EPOCH},,%H%M%S)}-${EXTEN})                                    ; permet de créer un dossier pour enregistrer l'appel
+                same =>n,System(/bin/mkdir -p /var/spool/asterisk/monitor/${DIRNAME})                                       ; permet de créer un ficher dans le dossier precedent
+                same =>n,MixMonitor(${FILENAME}.ulaw)                                                                       ; le type de format de l'enregistrement
+                same =>n,agi(googletts.agi,"l’appel va etre engeristrer pour une meilleur qualiter du service. ",fr)        ; message pour prévenir l'appelant
+                same =>n,Queue(sav)
+                same =>n,congestion()
+                same =>n,hangup()
+                </pre>
+            </div>
+    </section>
+    <section class="config_solu" id="test_SOLU">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/QrqnxQ3uTLU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </section>
+    <footer id="footer">
+        <p>GROUP INSHOT</p>
+    </footer>
 </body>
 </html>

@@ -6,6 +6,10 @@ let sur_cote_texte1 = document.querySelector(".sur_cote .Texte1")
 let sur_cote_texte2 = document.querySelector(".sur_cote .Texte2")
 let sur_cote_texte3 = document.querySelector(".sur_cote .Texte3")
 let container_1 = document.querySelector("section .container_1")
+let config_BV = document.querySelector("#config_BV")
+let config_QUEUE = document.querySelector("#config_QUEUE")
+let test_SOLU = document.querySelector("#test_SOLU")
+let close_img = document.querySelector(".close_img")
 
 function pour_texte_1_add() {
     container_1.classList.add("ArrierPlan");
@@ -31,6 +35,7 @@ function pour_texte_2_add() {
                 case 'texte2':
                     sur_cote_texte2.classList.add('Sur_Cote');
                     break;
+                
             }  
         }
     }
@@ -100,8 +105,26 @@ texte3.addEventListener("mouseenter",pour_texte_3_add)
 texte3.addEventListener("mouseleave",pour_texte_3_remove)
 
 
-// function test_clic() {
-//     console.log('bonjour');
-// }
+function clic_test_1() {
+    config_QUEUE.classList.add('visible')
+    close_img.classList.add('visible_close')
+}
+function clic_test_2() {
+   config_BV.classList.add('visible')
+   close_img.classList.add('visible_close')
+}
+function clic_test_3() {
+    test_SOLU.classList.add('visible')
+   close_img.classList.add('visible_close')
+}
+function clic_remove_1() {
+    config_BV.classList.remove('visible')
+    config_QUEUE.classList.remove('visible')
+    test_SOLU.classList.remove('visible')
+    close_img.classList.remove('visible_close')
+}
 
-// texte1.addEventListener('click',test_clic)
+texte1.addEventListener('click',clic_test_1)
+texte2.addEventListener('click',clic_test_2)
+texte3.addEventListener('click',clic_test_3)
+close_img.addEventListener('click',clic_remove_1)
